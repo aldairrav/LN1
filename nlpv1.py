@@ -3,7 +3,7 @@ import psycopg2
 from configparser import ConfigParser
 
 # Configura tu clave API de OpenAI aquí
-openai.api_key = 'aqui_api_key_chatgpt'
+openai.api_key = 'api_key'
 
 
 # Función para convertir la entrada en lenguaje natural a SQL utilizando detalles específicos de la base de datos
@@ -15,7 +15,7 @@ def natural_language_to_sql(question):
     - "session_id": ID del turno de caja que realizó la venta, referenciado a la tabla "public.pos_session".
     - "create_uid": ID del usuario que creó el registro, referenciado a la tabla "public.res_users".
     - "write_uid": ID del usuario que modificó el registro por última vez, referenciado a la tabla "public.res_users".
-    - "state": Estado del pedido, que puede ser "NEW" para nuevo, "PAID" para pagado, o "DONE" para cerrado y contabilizado.
+    - "state": Estado del pedido, que puede ser "new" para nuevo, "paid" para pagado, o "done" para cerrado y contabilizado.
     - "amount_tax": Importe total de impuestos de la venta.
     - "amount_total": Importe total del comprobante de venta.
     - "amount_paid": Total que ha sido pagado, pudiendo ser parcial por pagos a crédito.
@@ -32,7 +32,7 @@ def natural_language_to_sql(question):
     
     # Utiliza el endpoint de chat para hacer la solicitud
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # Asegúrate de especificar el modelo correcto aquí
+        model="gpt-3.5-turbo",  
         messages=[
             {"role": "system", "content": db_description},
             {"role": "user", "content": question}
@@ -50,10 +50,10 @@ def natural_language_to_sql(question):
 def execute_query(query):
     conn = psycopg2.connect(
     host="localhost",
-    database="misterpan",
-    user="postgres",
+    database="",
+    user="",
     password="",
-    port="5433"  
+    port=""  # Especifica el puerto aquí
 )
     result = None
     try:
@@ -71,12 +71,11 @@ def execute_query(query):
 def main():
     user_query = input("Por favor, introduce tu consulta en lenguaje natural: ")
     sql_query = natural_language_to_sql(user_query)
-
     print(f"Consulta SQL generada: {sql_query}")
     results = execute_query(sql_query)
     if results:
         for row in results:
-            print(row)  # Imprime cada fila del resultado
+            print(row)  
     else:
         print("No se encontraron resultados.")
 

@@ -50,10 +50,10 @@ def natural_language_to_sql(question):
 def execute_query(query):
     conn = psycopg2.connect(
     host="localhost",
-    database="",
-    user="",
-    password="",
-    port=""  # Especifica el puerto aquí
+    database="mrpan",
+    user="postgres",
+    password="postgres",
+    port="5433"  # Especifica el puerto aquí
 )
     result = None
     try:
